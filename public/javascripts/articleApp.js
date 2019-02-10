@@ -11,6 +11,14 @@ app.config(function($routeProvider) {
         .when('/about', {
             templateUrl: 'about.html'
         })
+        .when('/signup', {
+            templateUrl: 'signup.html',
+            controller: 'authController'
+        })
+        .when('/signin', {
+            templateUrl: 'signin.html',
+            controller: 'authController'
+        })
 });
 
 // Create a factory of services to get all articles from Mongo DB (routes/api.js)
@@ -35,4 +43,18 @@ app.controller('articleController', function($scope, articleService) {
             $scope.newArticle = {userName: '', title: '', text: '', timeStamp:''};
         });
     }
+});
+
+// For Authentication pages (Signin/ Signup)
+app.controller('authController', function($scope) {
+    $scope.user = {userName: '', password: ''};
+    $scope.msg = '';
+
+    $scope.signin = function() {
+        $scope.msg = 'Sign in request received for user : ' + $scope.user.userName;
+    };
+
+    $scope.signup = function() {
+        $scope.msg = 'Sign up request received for user : ' + $scope.user.userName;
+    };
 });
