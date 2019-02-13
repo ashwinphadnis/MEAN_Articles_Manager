@@ -1,18 +1,26 @@
 <h1>Articles</h1>
 
-<form ng-Submit='post()'>
-    <input required type='text' placeholder='Your name' ng-model='newArticle.username'><br><br>
+<form>
+    <!-- <input required type='text' placeholder='Your name' ng-model='newArticle.username'><br><br> -->
     <input required type='text' placeholder='Article title' ng-model='newArticle.title'><br><br>
-    <textArea required maxlength='400' placeholder='Article Text' rows='3' ng-model='newArticle.text'></textArea><br><br>
-    <input class='button' type='submit' value='Post'>
-</form>
+    <textArea required maxlength='400' placeholder='Article Text' rows='3' 
+        ng-model='newArticle.text'></textArea><br><br>
+    <!-- Show Post button for new article, and Update button for editing existing article -->
+    <input class='button' type='submit' value='Post' ng-click='post()' ng-hide='editMode'>
+    <input class='button' type='submit' value='Update' ng-click='update()' ng-show='editMode'>
 
-<div id='articles-posted'>
-    <h2>Articles Posted</h2>
-    <div ng-repeat="article in articles | orderBy: 'timeStamp': true">
-        <h3>{{article.title}}</h3>
-        <p>{{article.text}}</p>
-        <p><small>Posted by {{article.username}} at
-            {{article.timeStamp | date: "h:mma 'on' MMM d, y"}}</small></p>
+    <div id='articles-posted'>
+        <h2>Articles Posted</h2>
+        <div ng-repeat="article in articles | orderBy: 'timeStamp': true">
+            <h3>{{article.title}}</h3>
+            <p>{{article.text}}</p>
+            <p><small>Posted by {{article.username}} at
+                {{article.timeStamp | date: "h:mma 'on' MMM d, y"}}</small></p>
+            <!-- Shoew edit and delete buttons only to article owner -->
+            <input class='button' type='submit' value='Edit' 
+                ng-click='edit(article)' ng-show='isUserOwner(article)'>&nbsp;
+            <input class='button' type='submit' value='Delete' 
+                ng-click='delete(article)' ng-show='isUserOwner(article)'>
+        </div>
     </div>
-</div>
+</form>
