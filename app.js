@@ -6,6 +6,11 @@ var logger = require('morgan');
 const mongoose = require('mongoose'); // Add mongoose to connect to mongoDB
 const api = require('./routes/api');  // Create a api.js file in routes folder and map it here
 const index = require('./routes/index'); // is used to direct to index.html
+const passport = require('passport');
+const authenticate = require('./routes/authenticate')(passport);
+const session = require('express-session');
+const LocalStrategy = require('passport-local').Strategy;
+const bcrypt = require('bcrypt-nodejs');
 
 var app = express();
 
@@ -14,13 +19,21 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
+app.use(session({secret: 'keyboard cat', resave:false, saveUninitialized: false})); // For authentication
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(passport.initialize()); // For authentication
+app.use(passport.session());  // For authentication
 
 app.use('/api', api); // Include the routing here for /api access
 app.use('/', index);  // used to direct to index.html for root access
+app.use('/auth', authenticate); // For authentication
+
+const initPassport = require('./passport-initialize');
+initPassport(passport);
 
 // Connect to mongoDB server and articlesDB database
 mongoose.connect('mongodb://localhost:27017/articlesDB', {useNewUrlParser: true});

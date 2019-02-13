@@ -21,7 +21,7 @@ router.get ('/articles/:id', function(req, res, next) {
 // Insert new article in Mongo DB
 router.post ('/articles', function(req, res, next) {
     var newArticle = new Article();
-    newArticle.userName = req.body.userName;
+    newArticle.username = req.body.username;
     newArticle.title = req.body.title;
     newArticle.text = req.body.text;
     newArticle.save(function(err, article) {

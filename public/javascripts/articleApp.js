@@ -40,21 +40,21 @@ app.controller('articleController', function($scope, articleService) {
         articleService.save($scope.newArticle, function(res){
             $scope.articles = articleService.query();   // Get all articles
             // Reset values on screen for user
-            $scope.newArticle = {userName: '', title: '', text: '', timeStamp:''};
+            $scope.newArticle = {username: '', title: '', text: '', timeStamp:''};
         });
     }
 });
 
 // For Authentication pages (Signin/ Signup)
 app.controller('authController', function($scope) {
-    $scope.user = {userName: '', password: ''};
+    $scope.user = {username: '', password: ''};
     $scope.msg = '';
 
     $scope.signin = function() {
-        $scope.msg = 'Sign in request received for user : ' + $scope.user.userName;
+        $scope.msg = 'Sign in request received for user : ' + $scope.user.username;
     };
 
     $scope.signup = function() {
-        $scope.msg = 'Sign up request received for user : ' + $scope.user.userName;
+        $scope.msg = 'Sign up request received for user : ' + $scope.user.username;
     };
 });

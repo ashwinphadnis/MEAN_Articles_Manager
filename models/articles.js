@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const articleSchema = new mongoose.Schema({
-    userName: String,
+    username: String,
     title: String,
     text: String,
     timeStamp: {type: Date, default: Date.now}
