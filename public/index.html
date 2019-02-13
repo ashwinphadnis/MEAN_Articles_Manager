@@ -9,8 +9,16 @@
     <body ng-app='articleApp'>
         <div><a href='#/'>Articles</a>&nbsp;
             <a href='#/about'>About</a>&nbsp;
-            <a href='#/signup'>Sign Up</a>&nbsp;
-            <a href='#/signin'>Sign In</a>
+            <!-- Show Sign In and Sign Up when user has not logged in -->
+            <span ng-hide='authenticated'>
+                <a href='#/signup'>Sign Up</a>&nbsp;
+                <a href='#/signin'>Sign In</a>
+            </span>
+            <!-- Show a welcome message and log out when user has logged in -->
+            <span ng-show='authenticated'>
+                Welcome {{currentUser}}
+                <a href='#/' ng-click='signout()'>Sign Out</a>
+            </span>
         </div>
         <div ng-view></div>
     </body>

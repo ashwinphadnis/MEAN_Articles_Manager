@@ -1,4 +1,17 @@
-var app = angular.module('articleApp', ['ngRoute', 'ngResource']);
+var app = angular.module('articleApp', 
+    ['ngRoute', 'ngResource']).run(function($http, $rootScope) {
+        // $rootScope is a global object created to store the authentication and current user name
+        // Initializing the variables
+        $rootScope.authenticated = false;
+        $rootScope.currentUser = 'Guest';
+
+        // The variables shall be reset during logout
+        $rootScope.signout = function() {
+            $http.get('auth/signout');
+            $rootScope.authenticated = false;
+            $rootScope.currentUser = 'Guest';
+        }
+})
 
 // Configure router to open different HTMLs based on path
 // Implement a SPA
@@ -46,15 +59,33 @@ app.controller('articleController', function($scope, articleService) {
 });
 
 // For Authentication pages (Signin/ Signup)
-app.controller('authController', function($scope) {
+app.controller('authController', function($scope, $http, $location, $rootScope) {
     $scope.user = {username: '', password: ''};
     $scope.msg = '';
 
     $scope.signin = function() {
-        $scope.msg = 'Sign in request received for user : ' + $scope.user.username;
+        $http.post('/auth/signin', $scope.user).success(function(res) {
+            if (res.state == 'success') {   // If successful login, redirect to article page (root)
+                $rootScope.authenticated = true;    // Set global variable to authenticated
+                $rootScope.currentUser = res.user.username; // Set global variable with user name
+                $location.path('/');
+            }
+            else {
+                $scope.msg = res.message;
+            }
+        });
     };
 
     $scope.signup = function() {
-        $scope.msg = 'Sign up request received for user : ' + $scope.user.username;
+        $http.post('/auth/signup', $scope.user).success(function(res) {
+            if(res.state == 'success') {    // If signup successful, redirect to article page (root)
+                $rootScope.authenticated = true;    // Set global variable to authenticated
+                $rootScope.currentUser = res.user.username; // Set global variable with user name
+                $location.path('/');
+            }
+            else {
+                $scope.msg = res.message;
+            }
+        });
     };
 });
